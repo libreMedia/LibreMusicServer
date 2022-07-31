@@ -7,6 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
+var ok = readDb()
+
 func main() {
 	app := fiber.New()
 
@@ -18,10 +20,14 @@ func main() {
 	app.Get("/dirList", func(c *fiber.Ctx) error {
 		// fmt.Print(readDb()[1111].album)
 		fmt.Print("%T", readDb())
-		ok := readDb()
 		return c.JSON(ok)
 	})
 
+	app.Get("/artist/:artist", func(c *fiber.Ctx) error {
+		artist := c.Params("artist")
+		fmt.Println(artist)
+		return c.JSON(artist)
+	})
 	//TODO make go to DB
 	app.Static("/music", "../music", fiber.Static{
 		Compress:  true,
@@ -29,6 +35,6 @@ func main() {
 		Browse:    true,
 	})
 
-	fmt.Print("did a thing")
+	// fmt.Print("did a thing")
 	app.Listen(":9000")
 }
